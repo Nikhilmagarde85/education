@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Study Material</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+        }
+        h1 {
+            margin: 0;
+        }
+        a {
+            color: #fff;
+            text-decoration: none;
+        }
+        #tender-list {
+            padding: 20px;
+        }
+        .tender-item {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            padding: 10px;
+        }
+        .tender-item h3 {
+            margin-top: 0;
+        }
+        .tender-item p {
+            margin: 5px 0;
+        }
+        .tender-item .closing-date {
+            font-size: 14px;
+            color: #007bff;
+            cursor: pointer;
+        }
+        .tender-item .closing-date:hover {
+            text-decoration: underline;
+        }
+        #application-form {
+            background-color: #f9f9f9;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin: 20px auto;
+            padding: 20px;
+            width: 300px;
+        }
+        #application-form h2 {
+            margin-top: 0;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="text"],
+        input[type="number"] {
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 5px;
+        }
+        button {
+            background-color: #007bff;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            padding: 10px 20px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>CONTENT</h1>
+        <a href="index.html">Home</a>
+    </header>
+
+    <!-- Display a list of tenders from local storage -->
+    <div id="tender-list">
+        <h2>SUBJECT</h2>
+        <ul id="tender-items">
+            <!-- JavaScript will populate the list here -->
+        </ul>
+    </div>
+
+    <div id="application-form" style="display: none;">
+        <h2>Apply for Tender</h2>
+        <form id="applyForm">
+            <label for="applicantName">Your Name:</label>
+            <input type="text" name="applicantName" id="applicantName" required><br>
+
+            <label for="bidAmount">Bid Amount:</label>
+            <input type="number" name="bidAmount" id="bidAmount" required><br>
+
+            <!-- You can add more fields here as needed for the application -->
+
+            <button type="button" onclick="submitApplication()">Submit Application</button>
+        </form>
+    </div>
+
+    <script>
+        // Define an array to store the currently selected tender
+        let selectedTender = null;
+
+        // Retrieve tenders from local storage and display them
+        const tenders = JSON.parse(localStorage.getItem('tenders')) || [];
+
+        const tenderList = document.getElementById('tender-items');
+
+        if (tenders.length > 0) {
+            tenders.forEach((tender, index) => {
+                const listItem = document.createElement('li');
+                listItem.className = 'tender-item';
+                listItem.innerHTML = `
+                    <h3>${tender.title}</h3>
+                    <p>${tender.description}</p>
+                    <p class="closing-date" onclick="openLink('${tender.link}')">Download</p>
+                
+                `;
+                tenderList.appendChild(listItem);
+            });
+        } else {
+            tenderList.innerHTML = '<p>No tenders found.</p>';
+        }
+
+        function openLink(link) {
+            window.open(link, '_blank');
+        }
+
+        function openApplicationForm(index) {
+            selectedTender = tenders[index];
+            const applicationForm = document.getElementById('application-form');
+            applicationForm.style.display = 'block';
+        }
+
+        function submitApplication() {
+            if (!selectedTender) {
+                alert('No tender selected.');
+                return;
+            }
+
+            const applicantName = document.getElementById('applicantName').value;
+            const bidAmount = document.getElementById('bidAmount').value;
+
+            // You can add more form field retrieval here
+
+            // Send application data to the server (PHP script) for processing
+            fetch('submit_application.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    tenderId: selectedTender.tenderId,
+                    applicantName: applicantName,
+                    bidAmount: bidAmount, // Include bid amount
+                    // Include more fields here
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Application submitted successfully.');
+                } else {
+                    alert('Application submission failed.');
+                }
+            });
+
+            // Hide the application form
+            const applicationForm = document.getElementById('application-form');
+            applicationForm.style.display = 'none';
+        }
+    </script>
+</body>
+</html>
