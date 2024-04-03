@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Upload</title>
+</head>
+<body>
+    <h1>Upload PDF</h1>
+    <form action="/upload" method="post" enctype="multipart/form-data">
+        <label for="title">Title:</label>
+        <input type="text" id="title" name="title"><br><br>
+        <input type="file" name="pdf"><br><br>
+        <input type="submit" value="Upload">
+    </form>
+
+    <h1>PDFs</h1>
+    <ul id="pdfList"></ul>
+
+    <script>
+        fetch('/pdfs')
+            .then(response => response.json())
+            .then(data => {
+                const pdfList = document.getElementById('pdfList');
+                data.forEach(pdf => {
+                    const listItem = document.createElement('li');
+                    const link = document.createElement('a');
+                    link.href = '/' + pdf.path;
+                    link.innerText = pdf.title;
+                    listItem.appendChild(link);
+                    pdfList.appendChild(listItem);
+                });
+            })
+            .catch(error => console.error('Error:', error));
+    </script>
+</body>
+</html>

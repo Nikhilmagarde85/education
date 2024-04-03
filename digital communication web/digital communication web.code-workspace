@@ -1,0 +1,16 @@
+{
+	"folders": [
+		{
+			"name": "digital communication web",
+			"path": "."
+		},
+		{
+			"name": "images",
+			"path": "../Pictures/potfolio website/images"
+		}
+	],
+	"settings": {
+		"liveServer.settings.port": 5502,
+		"liveServer.settings.multiRootWorkspaceName": "digital communication web"
+	}
+}
