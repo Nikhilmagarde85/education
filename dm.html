@@ -49,7 +49,7 @@
         button[type="button"]:hover {
             background-color: #0056b3;
         }
-        #tenders-list {
+        #dm-list {
             margin: 20px;
             padding: 20px;
             border: 1px solid #ccc;
@@ -75,13 +75,11 @@
     <header>
         <h1>Digitl Marketing</h1>
         <a href="index.html" style="color: #fff;">Home</a>
-
-
     </header>
 
-    <form id="tenderForm">
-        <label for="tenderTitle">Title:</label>
-        <input type="text" name="tenderTitle" id="tenderTitle" required><br>
+    <form id="dmForm">
+        <label for="dmTitle">Title:</label>
+        <input type="text" name="dmTitle" id="dmTitle" required><br>
 
         <label for="description">Description:</label>
         <textarea name="description" id="description" rows="4" required></textarea><br>
@@ -89,78 +87,78 @@
         <label for="link">Google Drive:</label>
         <input type="text" name="link" id="link" required><br>
 
-        <button type="button" onclick="submitTender()">Submit</button>
+        <button type="button" onclick="submitDm()">Submit</button>
     </form>
 
-    <div id="tenders-list">
+    <div id="dm-list">
         <h2>Your Submitted Study Material</h2>
-        <ul id="tenders-items">
-            <!-- JavaScript will populate the list of submitted tenders here -->
+        <ul id="dm-items">
+            <!-- JavaScript will populate the list of submitted dms here -->
         </ul>
     </div>
 
     <script>
-        function submitTender() {
-            // Add JavaScript logic to submit the tender
-            const tenderTitle = document.getElementById('tenderTitle').value;
+        function submitDm() {
+            // Add JavaScript logic to submit the dm
+            const dmTitle = document.getElementById('dmTitle').value;
             const description = document.getElementById('description').value;
             const link = document.getElementById('link').value;
 
-            const tender = {
-                title: tenderTitle,
+            const dm = {
+                title: dmTitle,
                 description: description,
                 link: link
             };
 
-            // Store the tender in local storage
-            let tenders = JSON.parse(localStorage.getItem('tenders')) || [];
-            tenders.push(tender);
-            localStorage.setItem('tenders', JSON.stringify(tenders));
+            // Store the dm in local storage
+            let dms = JSON.parse(localStorage.getItem('dms')) || [];
+            dms.push(dm);
+            localStorage.setItem('dms', JSON.stringify(dms));
 
-            alert('Tender submitted successfully.');
+            alert('DM submitted successfully.');
 
             // Clear the form fields
-            document.getElementById('tenderTitle').value = '';
+            document.getElementById('dmTitle').value = '';
             document.getElementById('description').value = '';
             document.getElementById('link').value = '';
 
-            // Display the updated list of submitted tenders
-            displayTenders();
+            // Display the updated list of submitted dms
+            displayDms();
         }
 
-        function displayTenders() {
-            // Add JavaScript logic to display submitted tenders
-            const tendersList = document.getElementById('tenders-items');
-            tendersList.innerHTML = '';
+        function displayDms() {
+            // Add JavaScript logic to display submitted dms
+            const dmList = document.getElementById('dm-items');
+            dmList.innerHTML = '';
 
-            const tenders = JSON.parse(localStorage.getItem('tenders')) || [];
+            const dms = JSON.parse(localStorage.getItem('dms')) || [];
 
-            if (tenders.length > 0) {
-                tenders.forEach((tender, index) => {
+            if (dms.length > 0) {
+                dms.forEach((dm, index) => {
                     const listItem = document.createElement('li');
                     listItem.innerHTML = `
-                        <h3>${tender.title}</h3>
-                        <p>${tender.description}</p>
-                        <button onclick="deleteTender(${index})">Delete Tender</button>
+                        <h3>${dm.title}</h3>
+                        <p>${dm.description}</p>
+                        <button onclick="deleteDm(${index})">Delete DM</button>
                     `;
-                    tendersList.appendChild(listItem);
+                    dmList.appendChild(listItem);
                 });
             }
         }
 
-        function deleteTender(index) {
-            // Add JavaScript logic to delete a tender
-            let tenders = JSON.parse(localStorage.getItem('tenders')) || [];
+        function deleteDm(index) {
+            // Add JavaScript logic to delete a dm
+            let dms = JSON.parse(localStorage.getItem('dms')) || [];
 
-            if (index >= 0 && index < tenders.length) {
-                tenders.splice(index, 1);
-                localStorage.setItem('tenders', JSON.stringify(tenders));
-                displayTenders();
+            if (index >= 0 && index < dms.length) {
+                dms.splice(index, 1);
+                localStorage.setItem('dms', JSON.stringify(dms));
+                displayDms();
             }
         }
 
-        // Display submitted tenders when the page loads
-        displayTenders();
+        // Display submitted dms when the page loads
+        displayDms();
     </script>
 </body>
 </html>
