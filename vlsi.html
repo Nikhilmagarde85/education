@@ -1,1 +1,166 @@
-q
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Administration</title>
+   
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #00514d;
+            color: #f3f3f3;
+            text-align: center;
+            padding: 20px 0;
+        }
+        form {
+            margin: 20px;
+            max-width: 500px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input[type="text"],
+        textarea {
+            width: calc(100% - 10px);
+            padding: 5px;
+            margin-bottom: 10px;
+            border: 1px solid #c78f8f;
+            border-radius: 3px;
+        }
+        button[type="submit"],
+        button[type="button"] {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        button[type="submit"]:hover,
+        button[type="button"]:hover {
+            background-color: #0056b3;
+        }
+        #tenders-list {
+            margin: 20px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        li {
+            margin-bottom: 15px;
+        }
+        li:last-child {
+            margin-bottom: 0;
+        }
+        h2 {
+            margin-top: 0;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>VLSI</h1>
+        <a href="index.html" style="color: #fff;">Home</a>
+
+
+    </header>
+
+    <form id="tenderForm">
+        <label for="tenderTitle">Title:</label>
+        <input type="text" name="tenderTitle" id="tenderTitle" required><br>
+
+        <label for="description">Description:</label>
+        <textarea name="description" id="description" rows="4" required></textarea><br>
+
+        <label for="link">Google Drive:</label>
+        <input type="text" name="link" id="link" required><br>
+
+        <button type="button" onclick="submitTender()">Submit</button>
+    </form>
+
+    <div id="tenders-list">
+        <h2>Your Submitted Study Material</h2>
+        <ul id="tenders-items">
+            <!-- JavaScript will populate the list of submitted tenders here -->
+        </ul>
+    </div>
+
+    <script>
+        function submitTender() {
+            // Add JavaScript logic to submit the tender
+            const tenderTitle = document.getElementById('tenderTitle').value;
+            const description = document.getElementById('description').value;
+            const link = document.getElementById('link').value;
+
+            const tender = {
+                title: tenderTitle,
+                description: description,
+                link: link
+            };
+
+            // Store the tender in local storage
+            let tenders = JSON.parse(localStorage.getItem('tenders')) || [];
+            tenders.push(tender);
+            localStorage.setItem('tenders', JSON.stringify(tenders));
+
+            alert('Tender submitted successfully.');
+
+            // Clear the form fields
+            document.getElementById('tenderTitle').value = '';
+            document.getElementById('description').value = '';
+            document.getElementById('link').value = '';
+
+            // Display the updated list of submitted tenders
+            displayTenders();
+        }
+
+        function displayTenders() {
+            // Add JavaScript logic to display submitted tenders
+            const tendersList = document.getElementById('tenders-items');
+            tendersList.innerHTML = '';
+
+            const tenders = JSON.parse(localStorage.getItem('tenders')) || [];
+
+            if (tenders.length > 0) {
+                tenders.forEach((tender, index) => {
+                    const listItem = document.createElement('li');
+                    listItem.innerHTML = `
+                        <h3>${tender.title}</h3>
+                        <p>${tender.description}</p>
+                        <button onclick="deleteTender(${index})">Delete Tender</button>
+                    `;
+                    tendersList.appendChild(listItem);
+                });
+            }
+        }
+
+        function deleteTender(index) {
+            // Add JavaScript logic to delete a tender
+            let tenders = JSON.parse(localStorage.getItem('tenders')) || [];
+
+            if (index >= 0 && index < tenders.length) {
+                tenders.splice(index, 1);
+                localStorage.setItem('tenders', JSON.stringify(tenders));
+                displayTenders();
+            }
+        }
+
+        // Display submitted tenders when the page loads
+        displayTenders();
+    </script>
+</body>
+</html>
