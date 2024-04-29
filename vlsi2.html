@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -23,28 +22,20 @@
             color: #fff;
             text-decoration: none;
         }
-        #tender-list {
+        #data-list {
             padding: 20px;
         }
-        .tender-item {
+        .data-item {
             border: 1px solid #ccc;
             border-radius: 5px;
             margin-bottom: 10px;
             padding: 10px;
         }
-        .tender-item h3 {
+        .data-item h3 {
             margin-top: 0;
         }
-        .tender-item p {
+        .data-item p {
             margin: 5px 0;
-        }
-        .tender-item .closing-date {
-            font-size: 14px;
-            color: #007bff;
-            cursor: pointer;
-        }
-        .tender-item .closing-date:hover {
-            text-decoration: underline;
         }
         #application-form {
             background-color: #f9f9f9;
@@ -85,16 +76,16 @@
         <a href="index.html">Home</a>
     </header>
 
-    <!-- Display a list of tenders from local storage -->
-    <div id="tender-list">
+    <!-- Display a list of data items from local storage -->
+    <div id="data-list">
         <h2>SUBJECT</h2>
-        <ul id="tender-items">
+        <ul id="data-items">
             <!-- JavaScript will populate the list here -->
         </ul>
     </div>
 
     <div id="application-form" style="display: none;">
-        <h2>Apply for Tender</h2>
+        <h2>Apply for Data</h2>
         <form id="applyForm">
             <label for="applicantName">Your Name:</label>
             <input type="text" name="applicantName" id="applicantName" required><br>
@@ -109,28 +100,27 @@
     </div>
 
     <script>
-        // Define an array to store the currently selected tender
-        let selectedTender = null;
+        // Define an array to store the currently selected data item
+        let selectedData = null;
 
-        // Retrieve tenders from local storage and display them
-        const tenders = JSON.parse(localStorage.getItem('tenders')) || [];
+        // Retrieve data items from local storage and display them
+        const dataList = JSON.parse(localStorage.getItem('dataList')) || [];
 
-        const tenderList = document.getElementById('tender-items');
+        const dataListElement = document.getElementById('data-items');
 
-        if (tenders.length > 0) {
-            tenders.forEach((tender, index) => {
+        if (dataList.length > 0) {
+            dataList.forEach((data, index) => {
                 const listItem = document.createElement('li');
-                listItem.className = 'tender-item';
+                listItem.className = 'data-item';
                 listItem.innerHTML = `
-                    <h3>${tender.title}</h3>
-                    <p>${tender.description}</p>
-                    <p class="closing-date" onclick="openLink('${tender.link}')">Download</p>
-                
+                    <h3>${data.title}</h3>
+                    <p>${data.description}</p>
+                    <p class="closing-date" onclick="openLink('${data.link}')">Download</p>
                 `;
-                tenderList.appendChild(listItem);
+                dataListElement.appendChild(listItem);
             });
         } else {
-            tenderList.innerHTML = '<p>No tenders found.</p>';
+            dataListElement.innerHTML = '<p>No data items found.</p>';
         }
 
         function openLink(link) {
@@ -138,21 +128,19 @@
         }
 
         function openApplicationForm(index) {
-            selectedTender = tenders[index];
+            selectedData = dataList[index];
             const applicationForm = document.getElementById('application-form');
             applicationForm.style.display = 'block';
         }
 
         function submitApplication() {
-            if (!selectedTender) {
-                alert('No tender selected.');
+            if (!selectedData) {
+                alert('No data item selected.');
                 return;
             }
 
             const applicantName = document.getElementById('applicantName').value;
             const bidAmount = document.getElementById('bidAmount').value;
-
-            // You can add more form field retrieval here
 
             // Send application data to the server (PHP script) for processing
             fetch('submit.php', {
@@ -161,7 +149,7 @@
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    tenderId: selectedTender.tenderId,
+                    dataId: selectedData.dataId, // Adjust this to match your data ID
                     applicantName: applicantName,
                     bidAmount: bidAmount, // Include bid amount
                     // Include more fields here
