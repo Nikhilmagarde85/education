@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -23,27 +22,27 @@
             color: #fff;
             text-decoration: none;
         }
-        #tender-list {
+        #dm-list {
             padding: 20px;
         }
-        .tender-item {
+        .dm-item {
             border: 1px solid #ccc;
             border-radius: 5px;
             margin-bottom: 10px;
             padding: 10px;
         }
-        .tender-item h3 {
+        .dm-item h3 {
             margin-top: 0;
         }
-        .tender-item p {
+        .dm-item p {
             margin: 5px 0;
         }
-        .tender-item .closing-date {
+        .dm-item .download-link {
             font-size: 14px;
             color: #007bff;
             cursor: pointer;
         }
-        .tender-item .closing-date:hover {
+        .dm-item .download-link:hover {
             text-decoration: underline;
         }
         #application-form {
@@ -85,16 +84,16 @@
         <a href="index.html">Home</a>
     </header>
 
-    <!-- Display a list of tenders from local storage -->
-    <div id="tender-list">
+    <!-- Display a list of dms from local storage -->
+    <div id="dm-list">
         <h2>SUBJECT</h2>
-        <ul id="tender-items">
+        <ul id="dm-items">
             <!-- JavaScript will populate the list here -->
         </ul>
     </div>
 
     <div id="application-form" style="display: none;">
-        <h2>Apply for Tender</h2>
+        <h2>Apply for DM</h2>
         <form id="applyForm">
             <label for="applicantName">Your Name:</label>
             <input type="text" name="applicantName" id="applicantName" required><br>
@@ -109,28 +108,28 @@
     </div>
 
     <script>
-        // Define an array to store the currently selected tender
-        let selectedTender = null;
+        // Define an array to store the currently selected dm
+        let selectedDm = null;
 
-        // Retrieve tenders from local storage and display them
-        const tenders = JSON.parse(localStorage.getItem('tenders')) || [];
+        // Retrieve dms from local storage and display them
+        const dms = JSON.parse(localStorage.getItem('dms')) || [];
 
-        const tenderList = document.getElementById('tender-items');
+        const dmList = document.getElementById('dm-items');
 
-        if (tenders.length > 0) {
-            tenders.forEach((tender, index) => {
+        if (dms.length > 0) {
+            dms.forEach((dm, index) => {
                 const listItem = document.createElement('li');
-                listItem.className = 'tender-item';
+                listItem.className = 'dm-item';
                 listItem.innerHTML = `
-                    <h3>${tender.title}</h3>
-                    <p>${tender.description}</p>
-                    <p class="closing-date" onclick="openLink('${tender.link}')">Download</p>
+                    <h3>${dm.title}</h3>
+                    <p>${dm.description}</p>
+                    <p class="download-link" onclick="openLink('${dm.link}')">Download</p>
                 
                 `;
-                tenderList.appendChild(listItem);
+                dmList.appendChild(listItem);
             });
         } else {
-            tenderList.innerHTML = '<p>No tenders found.</p>';
+            dmList.innerHTML = '<p>No DMs found.</p>';
         }
 
         function openLink(link) {
@@ -138,14 +137,14 @@
         }
 
         function openApplicationForm(index) {
-            selectedTender = tenders[index];
+            selectedDm = dms[index];
             const applicationForm = document.getElementById('application-form');
             applicationForm.style.display = 'block';
         }
 
         function submitApplication() {
-            if (!selectedTender) {
-                alert('No tender selected.');
+            if (!selectedDm) {
+                alert('No dm selected.');
                 return;
             }
 
@@ -161,7 +160,7 @@
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    tenderId: selectedTender.tenderId,
+                    dmId: selectedDm.dmId,
                     applicantName: applicantName,
                     bidAmount: bidAmount, // Include bid amount
                     // Include more fields here
