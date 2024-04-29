@@ -2,15 +2,13 @@
 include 'db_connection.php'; // Include the database connection script
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Retrieve application data from the request
-    $tenderId = $_POST['tenderId'];
-    $applicantName = $_POST['applicantName'];
-    $bidAmount = $_POST['bidAmount']; // Retrieve bid amount
+    // Retrieve data from the request
+    $dataTitle = $_POST['dataTitle'];
+    $description = $_POST['description'];
+    $link = $_POST['link'];
 
-    // You can add more form field retrieval here
-
-    // SQL query to insert the application into the database, including bid amount
-    $sql = "INSERT INTO applications (tender_id, applicant_name, bid_amount) VALUES ('$tenderId', '$applicantName', '$bidAmount')";
+    // SQL query to insert the data into the database
+    $sql = "INSERT INTO data (title, description, link) VALUES ('$dataTitle', '$description', '$link')";
 
     if ($conn->query($sql) === TRUE) {
         echo json_encode(['success' => true]);
